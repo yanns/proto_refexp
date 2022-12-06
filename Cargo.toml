@@ -12,6 +12,7 @@ name = "proto_refexp"
 
 [dependencies]
 serde_json = "1.0.89"
+simd-json = "0.7.0"
 
 [target.'cfg(not(target_env = "msvc"))'.dependencies]
 tikv-jemallocator = "0.5"
