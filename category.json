@@ -1,0 +1,91 @@
+{
+  "id": "9c22b6db-984c-4b6a-adbf-4f9b570b12be",
+  "version": 2,
+  "lastMessageSequenceNumber": 1,
+  "createdAt": "2016-05-11T15:15:05.641Z",
+  "lastModifiedAt": "2016-06-28T09:53:49.551Z",
+  "name": {
+    "fr": "Carl Walton 0",
+    "it": "Jerome Mitchell 0",
+    "en": "Brent Morris 0",
+    "de": "Marcus Ortega 0",
+    "es": "Olga Briggs 0"
+  },
+  "slug": {
+    "fr": "carl-walton-0",
+    "it": "jerome-mitchell-0",
+    "en": "brent-morris-0",
+    "de": "marcus-ortega-0",
+    "es": "olga-briggs-0"
+  },
+  "description": {
+    "fr": "Ojijo issap ke kol dano nomje fup covje mew vijedsun ji osi asoroge jeiwiujo sefu kosew em.",
+    "it": "Milha op dukmuune ditucsip zebdudi siztapo winic eci ehapuovu kemibis pevlolif ceko rawuuz fokefoz.",
+    "en": "Sus igi idbe nuizo zimensi laapte puzwiole cuzarga naece bi men faiwuje pireuk til vuwe pu letecna pur.",
+    "de": "Nowol eto daha vuzeno panehur guvjizam ab mec vehve midagecu tuhivi firu tebbeej.",
+    "es": "Go gokweaf jaz aropozre juk cetwo dilog kovet pu ide venpapuco nivguzkop berakom ozke lu jioje nih."
+  },
+  "ancestors": [
+    {
+      "typeId": "category",
+      "id": "751beb14-e375-402b-b4e1-c91b85de7a3b"
+    },
+    {
+      "typeId": "category",
+      "id": "089826a7-497c-40f8-8323-9747b604a045"
+    },
+    {
+      "typeId": "category",
+      "id": "008bdb46-7693-40eb-bd9a-df2ff938da04"
+    },
+    {
+      "typeId": "category",
+      "id": "e8daebf4-a5d4-4d24-b0f3-7abce3ebb94c"
+    },
+    {
+      "typeId": "category",
+      "id": "2be5bd99-ea79-4e61-a613-96c9b1fa002b"
+    },
+    {
+      "typeId": "category",
+      "id": "be25eabd-4779-4ca0-9c69-ab3339f86ba7"
+    },
+    {
+      "typeId": "category",
+      "id": "93357ceb-e579-4573-8aa8-52dfad9eaa17"
+    },
+    {
+      "typeId": "category",
+      "id": "3ad5c07a-ea9a-466e-8feb-e45a8c424ac4"
+    },
+    {
+      "typeId": "category",
+      "id": "424fb28d-5e91-4ea8-bc1c-d7d08333208c"
+    },
+    {
+      "typeId": "category",
+      "id": "23e03dbe-b4f9-4f70-ba96-96ce6fac4393"
+    }
+  ],
+  "parent": {
+    "typeId": "category",
+    "id": "23e03dbe-b4f9-4f70-ba96-96ce6fac4393"
+  },
+  "orderHint": "0.00001462979705641535677500",
+  "externalId": "root-cat-external-0",
+  "metaTitle": {
+    "fr": "Carl Walton 0",
+    "it": "Jerome Mitchell 0",
+    "en": "Brent Morris 0",
+    "de": "Marcus Ortega 0",
+    "es": "Olga Briggs 0"
+  },
+  "metaDescription": {
+    "fr": "Ojijo issap ke kol dano nomje fup covje mew vijedsun ji osi asoroge jeiwiujo sefu kosew em.",
+    "it": "Milha op dukmuune ditucsip zebdudi siztapo winic eci ehapuovu kemibis pevlolif ceko rawuuz fokefoz.",
+    "en": "Sus igi idbe nuizo zimensi laapte puzwiole cuzarga naece bi men faiwuje pireuk til vuwe pu letecna pur.",
+    "de": "Nowol eto daha vuzeno panehur guvjizam ab mec vehve midagecu tuhivi firu tebbeej.",
+    "es": "Go gokweaf jaz aropozre juk cetwo dilog kovet pu ide venpapuco nivguzkop berakom ozke lu jioje nih."
+  },
+  "assets": []
+}

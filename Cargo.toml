@@ -1,0 +1,10 @@
+[package]
+name = "proto_refexp"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+serde_json = "1.0.89"
+
+[target.'cfg(not(target_env = "msvc"))'.dependencies]
+tikv-jemallocator = "0.5"

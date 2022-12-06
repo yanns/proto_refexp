@@ -1,0 +1,303 @@
+{
+  "id": "af49b141-6883-4201-addf-1cc2645751f5",
+  "version": 22,
+  "createdAt": "2016-05-11T15:00:36.115Z",
+  "lastModifiedAt": "2018-05-16T08:23:36.004Z",
+  "name": "With Required Fields",
+  "description": "product type with required fields",
+  "classifier": "Complex",
+  "attributes": [
+    {
+      "name": "required_text_singleline",
+      "label": {
+        "en": "required_text",
+        "de": "",
+        "af": "",
+        "ak": ""
+      },
+      "inputTip": {
+        "de": "just a test",
+        "en": "",
+        "af": "",
+        "ak": ""
+      },
+      "isRequired": true,
+      "type": {
+        "name": "text"
+      },
+      "attributeConstraint": "None",
+      "isSearchable": true,
+      "inputHint": "SingleLine",
+      "displayGroup": "Other"
+    },
+    {
+      "name": "required_text_multiline",
+      "label": {
+        "en": "required_text_multiline",
+        "de": "",
+        "af": "",
+        "ak": ""
+      },
+      "inputTip": {
+        "de": "",
+        "en": "",
+        "af": "",
+        "ak": ""
+      },
+      "isRequired": true,
+      "type": {
+        "name": "text"
+      },
+      "attributeConstraint": "None",
+      "isSearchable": false,
+      "inputHint": "MultiLine",
+      "displayGroup": "Other"
+    },
+    {
+      "name": "required_text_singleline_localized",
+      "label": {
+        "en": "required_text_singleline_localized"
+      },
+      "isRequired": true,
+      "type": {
+        "name": "ltext"
+      },
+      "attributeConstraint": "None",
+      "isSearchable": true,
+      "inputHint": "SingleLine",
+      "displayGroup": "Other"
+    },
+    {
+      "name": "required_text_multiline_localized",
+      "label": {
+        "en": "required_text_multiline_localized"
+      },
+      "isRequired": true,
+      "type": {
+        "name": "ltext"
+      },
+      "attributeConstraint": "None",
+      "isSearchable": true,
+      "inputHint": "MultiLine",
+      "displayGroup": "Other"
+    },
+    {
+      "name": "required_enum",
+      "label": {
+        "en": "required_enum"
+      },
+      "isRequired": true,
+      "type": {
+        "name": "enum",
+        "values": [
+          {
+            "key": "one",
+            "label": "one"
+          },
+          {
+            "key": "two",
+            "label": "two"
+          },
+          {
+            "key": "three",
+            "label": "three"
+          }
+        ]
+      },
+      "attributeConstraint": "None",
+      "isSearchable": true,
+      "inputHint": "SingleLine",
+      "displayGroup": "Other"
+    },
+    {
+      "name": "required_number",
+      "label": {
+        "en": "required_number"
+      },
+      "isRequired": true,
+      "type": {
+        "name": "number"
+      },
+      "attributeConstraint": "None",
+      "isSearchable": true,
+      "inputHint": "SingleLine",
+      "displayGroup": "Other"
+    },
+    {
+      "name": "required_money",
+      "label": {
+        "en": "required_money"
+      },
+      "isRequired": true,
+      "type": {
+        "name": "money"
+      },
+      "attributeConstraint": "None",
+      "isSearchable": true,
+      "inputHint": "SingleLine",
+      "displayGroup": "Other"
+    },
+    {
+      "name": "required_date",
+      "label": {
+        "fr": "required_date",
+        "it": "required_date",
+        "en": "required_date",
+        "de": "required_date",
+        "es": "required_date"
+      },
+      "isRequired": true,
+      "type": {
+        "name": "date"
+      },
+      "attributeConstraint": "None",
+      "isSearchable": true,
+      "inputHint": "SingleLine",
+      "displayGroup": "Other"
+    },
+    {
+      "name": "required_time",
+      "label": {
+        "fr": "required_time",
+        "it": "required_time",
+        "en": "required_time",
+        "de": "required_time",
+        "es": "required_time"
+      },
+      "isRequired": true,
+      "type": {
+        "name": "time"
+      },
+      "attributeConstraint": "None",
+      "isSearchable": true,
+      "inputHint": "SingleLine",
+      "displayGroup": "Other"
+    },
+    {
+      "name": "required_datetime",
+      "label": {
+        "fr": "required_datetime",
+        "it": "required_datetime",
+        "en": "required_datetime",
+        "de": "required_datetime",
+        "es": "required_datetime"
+      },
+      "isRequired": true,
+      "type": {
+        "name": "datetime"
+      },
+      "attributeConstraint": "None",
+      "isSearchable": true,
+      "inputHint": "SingleLine",
+      "displayGroup": "Other"
+    },
+    {
+      "name": "required_reference",
+      "label": {
+        "fr": "required_reference",
+        "it": "required_reference",
+        "en": "required_reference",
+        "de": "required_reference",
+        "es": "required_reference"
+      },
+      "isRequired": true,
+      "type": {
+        "name": "reference",
+        "referenceTypeId": "product"
+      },
+      "attributeConstraint": "None",
+      "isSearchable": true,
+      "inputHint": "SingleLine",
+      "displayGroup": "Other"
+    },
+    {
+      "name": "set_text",
+      "label": {
+        "en": "set text"
+      },
+      "isRequired": false,
+      "type": {
+        "name": "set",
+        "elementType": {
+          "name": "text"
+        }
+      },
+      "attributeConstraint": "None",
+      "isSearchable": true,
+      "inputHint": "SingleLine",
+      "displayGroup": "Other"
+    },
+    {
+      "name": "set_text_localized",
+      "label": {
+        "en": "set text localized"
+      },
+      "isRequired": false,
+      "type": {
+        "name": "set",
+        "elementType": {
+          "name": "ltext"
+        }
+      },
+      "attributeConstraint": "None",
+      "isSearchable": true,
+      "inputHint": "SingleLine",
+      "displayGroup": "Other"
+    },
+    {
+      "name": "set_enum_localized",
+      "label": {
+        "en": "set enum localized"
+      },
+      "isRequired": false,
+      "type": {
+        "name": "set",
+        "elementType": {
+          "name": "lenum",
+          "values": [
+            {
+              "key": "one",
+              "label": {
+                "en": "one"
+              }
+            },
+            {
+              "key": "two",
+              "label": {
+                "en": "two"
+              }
+            },
+            {
+              "key": "three",
+              "label": {
+                "en": "three"
+              }
+            }
+          ]
+        }
+      },
+      "attributeConstraint": "None",
+      "isSearchable": true,
+      "inputHint": "SingleLine",
+      "displayGroup": "Other"
+    },
+    {
+      "name": "set_multiline_text",
+      "label": {
+        "en": "set_multiline_text"
+      },
+      "isRequired": false,
+      "type": {
+        "name": "set",
+        "elementType": {
+          "name": "ltext"
+        }
+      },
+      "attributeConstraint": "None",
+      "isSearchable": true,
+      "inputHint": "MultiLine",
+      "displayGroup": "Other"
+    }
+  ],
+  "key": "we"
+}
