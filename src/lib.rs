@@ -1,6 +1,6 @@
 use serde_json::Value;
 
-pub fn expand(products_raw: &[u8], product_type_raw: &[u8], category_raw: &[u8]) -> String {
+pub fn expand(products_raw: &mut [u8], product_type_raw: &mut [u8], category_raw: &mut [u8]) -> String {
     let mut products = parse(products_raw).unwrap();
     let product_type = parse(product_type_raw).unwrap();
     let category = parse(category_raw).unwrap();
@@ -10,8 +10,8 @@ pub fn expand(products_raw: &[u8], product_type_raw: &[u8], category_raw: &[u8])
     serialize(products)
 }
 
-fn parse(s: &[u8]) -> serde_json::Result<Value> {
-    serde_json::from_slice(s)
+fn parse(s: &mut [u8]) -> simd_json::Result<Value> {
+    simd_json::serde::from_slice(s.as_mut())
 }
 
 fn transform(products: &mut Value, expanded_product_type: Value, expanded_category: Value) {
