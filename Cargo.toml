@@ -21,5 +21,5 @@ tikv-jemallocator = "0.5"
 criterion = "0.3"
 
 [[bench]]
-name = "my_benchmark"
+name = "expansion"
 harness = false
