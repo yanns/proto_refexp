@@ -7,11 +7,7 @@ use serde::Serialize;
 use serde_json::Value;
 use std::borrow::Cow;
 
-pub fn expand(
-    products_raw: &mut [u8],
-    product_type_raw: &mut [u8],
-    category_raw: &mut [u8],
-) -> String {
+pub fn expand(products_raw: &str, product_type_raw: &str, category_raw: &str) -> String {
     let mut products = parse_expandable(products_raw).unwrap();
     let product_type = parse(product_type_raw).unwrap();
     let category = parse(category_raw).unwrap();
@@ -21,12 +17,12 @@ pub fn expand(
     serialize(products)
 }
 
-fn parse_expandable(s: &mut [u8]) -> serde_json::Result<ExpandableValue> {
-    serde_json::from_slice(s)
+fn parse_expandable(s: &str) -> serde_json::Result<ExpandableValue> {
+    serde_json::from_str(s)
 }
 
-fn parse(s: &mut [u8]) -> simd_json::Result<Value> {
-    simd_json::serde::from_slice(s)
+fn parse(s: &str) -> serde_json::Result<Value> {
+    serde_json::from_str(s)
 }
 
 const OBJ: Cow<str> = Cow::Borrowed("obj");
