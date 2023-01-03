@@ -14,7 +14,7 @@ name = "proto_refexp"
 debug = true
 
 [dependencies]
-serde = { version = "1.0.152", features = ["rc"] }
+serde = "1.0.152"
 serde_json = { version = "1.0.89", features = ["preserve_order"] }
 simd-json = "0.7.0"
 

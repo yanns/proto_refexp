@@ -5,7 +5,7 @@ mod ser;
 use crate::expandable_value::{ExpandableValue, ObjectField};
 use serde::Serialize;
 use serde_json::Value;
-use std::rc::Rc;
+use std::borrow::Cow;
 
 pub fn expand(
     products_raw: &mut [u8],
@@ -16,7 +16,7 @@ pub fn expand(
     let product_type = parse(product_type_raw).unwrap();
     let category = parse(category_raw).unwrap();
 
-    transform(&mut products, product_type, category);
+    transform(&mut products, &product_type, &category);
 
     serialize(products)
 }
@@ -29,13 +29,13 @@ fn parse(s: &mut [u8]) -> simd_json::Result<Value> {
     simd_json::serde::from_slice(s)
 }
 
-fn transform(
-    products: &mut ExpandableValue,
-    expanded_product_type: Value,
-    expanded_category: Value,
+const OBJ: Cow<str> = Cow::Borrowed("obj");
+
+fn transform<'a>(
+    products: &mut ExpandableValue<'a>,
+    expanded_product_type: &'a Value,
+    expanded_category: &'a Value,
 ) {
-    let expanded_product_type = Rc::new(expanded_product_type);
-    let expanded_category = Rc::new(expanded_category);
     if let Some(products_array) = products.as_array_mut() {
         for product in products_array {
             if let Some(product_fields) = product.as_object_mut() {
@@ -45,10 +45,8 @@ fn transform(
                             if k == "productType" {
                                 if let Some(product_type) = f.as_object_mut() {
                                     product_type.push((
-                                        "obj".to_string(),
-                                        ObjectField::ExpandedReference(
-                                            expanded_product_type.clone(),
-                                        ),
+                                        OBJ,
+                                        ObjectField::ExpandedReference(expanded_product_type),
                                     ));
                                 }
                             } else if k == "categories" {
@@ -56,10 +54,8 @@ fn transform(
                                     for category in categories_array {
                                         if let Some(category) = category.as_object_mut() {
                                             category.push((
-                                                "obj".to_string(),
-                                                ObjectField::ExpandedReference(
-                                                    expanded_category.clone(),
-                                                ),
+                                                OBJ,
+                                                ObjectField::ExpandedReference(expanded_category),
                                             ));
                                         }
                                     }
@@ -97,7 +93,7 @@ mod tests {
         let category = category();
 
         // when
-        transform(&mut products, product_type, category);
+        transform(&mut products, &product_type, &category);
 
         // then
         assert_eq!(
@@ -106,7 +102,7 @@ mod tests {
         );
     }
 
-    fn products() -> ExpandableValue {
+    fn products() -> ExpandableValue<'static> {
         json!([
             {
                 "id": "id1",
@@ -132,10 +128,11 @@ mod tests {
                 ]
             }
         ])
-        .into()
+        .try_into()
+        .unwrap()
     }
 
-    fn expanded_products() -> ExpandableValue {
+    fn expanded_products() -> ExpandableValue<'static> {
         json!([
             {
                 "id": "id1",
