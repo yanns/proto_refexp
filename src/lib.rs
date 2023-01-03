@@ -1,7 +1,18 @@
-use serde_json::Value;
+mod de;
+mod expandable_value;
+mod ser;
 
-pub fn expand(products_raw: &mut [u8], product_type_raw: &mut [u8], category_raw: &mut [u8]) -> String {
-    let mut products = parse(products_raw).unwrap();
+use crate::expandable_value::{ExpandableValue, ObjectField};
+use serde::Serialize;
+use serde_json::Value;
+use std::rc::Rc;
+
+pub fn expand(
+    products_raw: &mut [u8],
+    product_type_raw: &mut [u8],
+    category_raw: &mut [u8],
+) -> String {
+    let mut products = parse_expandable(products_raw).unwrap();
     let product_type = parse(product_type_raw).unwrap();
     let category = parse(category_raw).unwrap();
 
@@ -10,28 +21,52 @@ pub fn expand(products_raw: &mut [u8], product_type_raw: &mut [u8], category_raw
     serialize(products)
 }
 
-fn parse(s: &mut [u8]) -> simd_json::Result<Value> {
-    simd_json::serde::from_slice(s.as_mut())
+fn parse_expandable(s: &mut [u8]) -> serde_json::Result<ExpandableValue> {
+    serde_json::from_slice(s)
 }
 
-fn transform(products: &mut Value, expanded_product_type: Value, expanded_category: Value) {
+fn parse(s: &mut [u8]) -> simd_json::Result<Value> {
+    simd_json::serde::from_slice(s)
+}
+
+fn transform(
+    products: &mut ExpandableValue,
+    expanded_product_type: Value,
+    expanded_category: Value,
+) {
+    let expanded_product_type = Rc::new(expanded_product_type);
+    let expanded_category = Rc::new(expanded_category);
     if let Some(products_array) = products.as_array_mut() {
         for product in products_array {
-            if let Some(product) = product.as_object_mut() {
-                if let Some(product_type) = product
-                    .get_mut("productType")
-                    .and_then(|v| v.as_object_mut())
-                {
-                    product_type.insert("obj".to_string(), expanded_product_type.clone());
-                }
-
-                if let Some(categories) =
-                    product.get_mut("categories").and_then(|v| v.as_array_mut())
-                {
-                    for category in categories {
-                        if let Some(category) = category.as_object_mut() {
-                            category.insert("obj".to_string(), expanded_category.clone());
+            if let Some(product_fields) = product.as_object_mut() {
+                for (k, v) in product_fields {
+                    match v {
+                        ObjectField::Field(f) => {
+                            if k == "productType" {
+                                if let Some(product_type) = f.as_object_mut() {
+                                    product_type.push((
+                                        "obj".to_string(),
+                                        ObjectField::ExpandedReference(
+                                            expanded_product_type.clone(),
+                                        ),
+                                    ));
+                                }
+                            } else if k == "categories" {
+                                if let Some(categories_array) = f.as_array_mut() {
+                                    for category in categories_array {
+                                        if let Some(category) = category.as_object_mut() {
+                                            category.push((
+                                                "obj".to_string(),
+                                                ObjectField::ExpandedReference(
+                                                    expanded_category.clone(),
+                                                ),
+                                            ));
+                                        }
+                                    }
+                                }
+                            }
                         }
+                        ObjectField::ExpandedReference(_) => {}
                     }
                 }
             }
@@ -39,12 +74,17 @@ fn transform(products: &mut Value, expanded_product_type: Value, expanded_catego
     }
 }
 
-fn serialize(v: Value) -> String {
-    v.to_string()
+fn serialize<T>(v: T) -> String
+where
+    T: Serialize,
+{
+    serde_json::to_string(&v).unwrap()
 }
 
 #[cfg(test)]
 mod tests {
+    use crate::expandable_value::ExpandableValue;
+    use pretty_assertions::assert_eq;
     use serde_json::{json, Value};
 
     use crate::transform;
@@ -60,10 +100,13 @@ mod tests {
         transform(&mut products, product_type, category);
 
         // then
-        assert_eq!(products, expanded_products());
+        assert_eq!(
+            serde_json::to_string(&products).unwrap(),
+            serde_json::to_string(&expanded_products()).unwrap()
+        );
     }
 
-    fn products() -> Value {
+    fn products() -> ExpandableValue {
         json!([
             {
                 "id": "id1",
@@ -89,9 +132,10 @@ mod tests {
                 ]
             }
         ])
+        .into()
     }
 
-    fn expanded_products() -> Value {
+    fn expanded_products() -> ExpandableValue {
         json!([
             {
                 "id": "id1",
@@ -119,6 +163,7 @@ mod tests {
                 ]
             }
         ])
+        .into()
     }
 
     fn product_type() -> Value {
