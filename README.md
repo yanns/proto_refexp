@@ -13,7 +13,7 @@ cargo bench
 open target/criterion/report/index.html
 
 # run the benchmark and get a flamegraph ('--root' for mac)
-CARGO_PROFILE_RELEASE_DEBUG=true cargo flamegraph --root --bench expansion
+cargo flamegraph --root --bench expansion
 
 # open the flamegraph
 open flamegraph.svg
