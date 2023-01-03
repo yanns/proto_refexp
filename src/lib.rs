@@ -5,6 +5,7 @@ mod ser;
 use crate::expandable_value::{ExpandableValue, ObjectField};
 use serde::Serialize;
 use serde_json::Value;
+use std::borrow::Cow;
 
 pub fn expand(
     products_raw: &mut [u8],
@@ -28,6 +29,8 @@ fn parse(s: &mut [u8]) -> simd_json::Result<Value> {
     simd_json::serde::from_slice(s)
 }
 
+const OBJ: Cow<str> = Cow::Borrowed("obj");
+
 fn transform<'a>(
     products: &mut ExpandableValue<'a>,
     expanded_product_type: &'a Value,
@@ -42,7 +45,7 @@ fn transform<'a>(
                             if k == "productType" {
                                 if let Some(product_type) = f.as_object_mut() {
                                     product_type.push((
-                                        "obj".to_string(),
+                                        OBJ,
                                         ObjectField::ExpandedReference(expanded_product_type),
                                     ));
                                 }
@@ -51,7 +54,7 @@ fn transform<'a>(
                                     for category in categories_array {
                                         if let Some(category) = category.as_object_mut() {
                                             category.push((
-                                                "obj".to_string(),
+                                                OBJ,
                                                 ObjectField::ExpandedReference(expanded_category),
                                             ));
                                         }

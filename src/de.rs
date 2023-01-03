@@ -2,6 +2,7 @@ use crate::expandable_value::{ExpandableValue, ObjectField};
 use serde::de::{Error, MapAccess, SeqAccess, Visitor};
 use serde::{Deserialize, Deserializer};
 use serde_json::Value;
+use std::borrow::Cow;
 use std::fmt::Formatter;
 use std::marker::PhantomData;
 
@@ -49,7 +50,15 @@ impl<'de: 'a, 'a, T> Visitor<'de> for ExpandableValueVisitor<'a, T> {
     where
         E: Error,
     {
-        Ok(ExpandableValue::Other(Value::String(v.to_string())))
+        Ok(ExpandableValue::String(Cow::Owned(v.to_string())))
+    }
+
+    #[inline]
+    fn visit_borrowed_str<E>(self, v: &'de str) -> Result<Self::Value, E>
+    where
+        E: Error,
+    {
+        Ok(ExpandableValue::String(Cow::Borrowed(v)))
     }
 
     #[inline]
@@ -71,11 +80,11 @@ impl<'de: 'a, 'a, T> Visitor<'de> for ExpandableValueVisitor<'a, T> {
     where
         V: MapAccess<'de>,
     {
-        let mut v: Vec<(String, ObjectField)> =
+        let mut v: Vec<(Cow<str>, ObjectField)> =
             Vec::with_capacity(visitor.size_hint().unwrap_or(0));
 
-        while let Some((key, value)) = visitor.next_entry::<String, ExpandableValue>()? {
-            v.push((key, ObjectField::Field(value)));
+        while let Some((key, value)) = visitor.next_entry::<&str, ExpandableValue>()? {
+            v.push((Cow::Borrowed(key), ObjectField::Field(value)));
         }
 
         Ok(ExpandableValue::Object(v))

@@ -1,10 +1,12 @@
 use serde_json::Value;
+use std::borrow::Cow;
 
 #[derive(Clone, Eq, PartialEq, Debug)]
 pub enum ExpandableValue<'a> {
     Array(Vec<ExpandableValue<'a>>),
-    Object(Vec<(String, ObjectField<'a>)>),
+    Object(Vec<(Cow<'a, str>, ObjectField<'a>)>),
     Other(Value),
+    String(Cow<'a, str>),
 }
 
 #[derive(Clone, Eq, PartialEq, Debug)]
@@ -21,7 +23,7 @@ impl<'a> ExpandableValue<'a> {
         }
     }
 
-    pub fn as_object_mut(&mut self) -> Option<&mut Vec<(String, ObjectField<'a>)>> {
+    pub fn as_object_mut(&mut self) -> Option<&mut Vec<(Cow<'a, str>, ObjectField<'a>)>> {
         match self {
             ExpandableValue::Object(map) => Some(map),
             _ => None,
@@ -33,6 +35,7 @@ impl<'a> ExpandableValue<'a> {
 mod tests {
     use crate::expandable_value::{ExpandableValue, ObjectField};
     use serde_json::Value;
+    use std::borrow::Cow;
 
     impl From<Value> for ExpandableValue<'_> {
         fn from(value: Value) -> Self {
@@ -42,9 +45,10 @@ mod tests {
                 }
                 Value::Object(o) => ExpandableValue::Object(
                     o.into_iter()
-                        .map(|kv| (kv.0, ObjectField::Field(kv.1.into())))
+                        .map(|kv| (Cow::Owned(kv.0), ObjectField::Field(kv.1.into())))
                         .collect(),
                 ),
+                Value::String(s) => ExpandableValue::String(Cow::Owned(s)),
                 other => ExpandableValue::Other(other),
             }
         }

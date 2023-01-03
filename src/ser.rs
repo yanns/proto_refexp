@@ -17,6 +17,7 @@ impl Serialize for ExpandableValue<'_> {
                 }
                 map.end()
             }
+            ExpandableValue::String(s) => serializer.serialize_str(s),
             ExpandableValue::Other(v) => v.serialize(serializer),
         }
     }
