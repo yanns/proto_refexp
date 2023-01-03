@@ -24,24 +24,33 @@ impl<'de> Visitor<'de> for ExpandableValueVisitor {
     }
 
     #[inline]
-    fn visit_bool<E>(self, v: bool) -> Result<Self::Value, E> where E: Error {
+    fn visit_bool<E>(self, v: bool) -> Result<Self::Value, E>
+    where
+        E: Error,
+    {
         Ok(ExpandableValue::Other(Value::Bool(v)))
     }
 
     #[inline]
-    fn visit_u64<E>(self, v: u64) -> Result<Self::Value, E> where E: Error {
+    fn visit_u64<E>(self, v: u64) -> Result<Self::Value, E>
+    where
+        E: Error,
+    {
         Ok(ExpandableValue::Other(Value::Number(v.into())))
     }
 
     #[inline]
-    fn visit_str<E>(self, v: &str) -> Result<Self::Value, E> where E: Error {
+    fn visit_str<E>(self, v: &str) -> Result<Self::Value, E>
+    where
+        E: Error,
+    {
         Ok(ExpandableValue::Other(Value::String(v.to_string())))
     }
 
     #[inline]
     fn visit_seq<V>(self, mut visitor: V) -> Result<ExpandableValue, V::Error>
-        where
-            V: SeqAccess<'de>,
+    where
+        V: SeqAccess<'de>,
     {
         let mut vec = Vec::with_capacity(visitor.size_hint().unwrap_or(0));
 
@@ -54,8 +63,8 @@ impl<'de> Visitor<'de> for ExpandableValueVisitor {
 
     #[inline]
     fn visit_map<V>(self, mut visitor: V) -> Result<ExpandableValue, V::Error>
-        where
-            V: MapAccess<'de>,
+    where
+        V: MapAccess<'de>,
     {
         let mut v: Vec<(String, ObjectField)> =
             Vec::with_capacity(visitor.size_hint().unwrap_or(0));

@@ -32,13 +32,15 @@ impl ExpandableValue {
 
 #[cfg(test)]
 mod tests {
-    use serde_json::Value;
     use crate::expandable_value::{ExpandableValue, ObjectField};
+    use serde_json::Value;
 
     impl From<Value> for ExpandableValue {
         fn from(value: Value) -> Self {
             match value {
-                Value::Array(v) => ExpandableValue::Array(v.into_iter().map(|e| e.into()).collect()),
+                Value::Array(v) => {
+                    ExpandableValue::Array(v.into_iter().map(|e| e.into()).collect())
+                }
                 Value::Object(o) => ExpandableValue::Object(
                     o.into_iter()
                         .map(|kv| (kv.0, ObjectField::Field(kv.1.into())))
