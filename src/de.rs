@@ -3,21 +3,26 @@ use serde::de::{Error, MapAccess, SeqAccess, Visitor};
 use serde::{Deserialize, Deserializer};
 use serde_json::Value;
 use std::fmt::Formatter;
+use std::marker::PhantomData;
 
-impl<'de> Deserialize<'de> for ExpandableValue {
+impl<'de: 'a, 'a> Deserialize<'de> for ExpandableValue<'a> {
     #[inline]
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
         D: Deserializer<'de>,
     {
-        deserializer.deserialize_any(ExpandableValueVisitor)
+        deserializer.deserialize_any(ExpandableValueVisitor {
+            phantom: PhantomData::<&'a ExpandableValue>,
+        })
     }
 }
 
-struct ExpandableValueVisitor;
+struct ExpandableValueVisitor<'a, T> {
+    phantom: PhantomData<&'a T>,
+}
 
-impl<'de> Visitor<'de> for ExpandableValueVisitor {
-    type Value = ExpandableValue;
+impl<'de: 'a, 'a, T> Visitor<'de> for ExpandableValueVisitor<'a, T> {
+    type Value = ExpandableValue<'a>;
 
     fn expecting(&self, formatter: &mut Formatter) -> std::fmt::Result {
         formatter.write_str("any JSON value")
@@ -48,7 +53,7 @@ impl<'de> Visitor<'de> for ExpandableValueVisitor {
     }
 
     #[inline]
-    fn visit_seq<V>(self, mut visitor: V) -> Result<ExpandableValue, V::Error>
+    fn visit_seq<V>(self, mut visitor: V) -> Result<ExpandableValue<'a>, V::Error>
     where
         V: SeqAccess<'de>,
     {
@@ -62,7 +67,7 @@ impl<'de> Visitor<'de> for ExpandableValueVisitor {
     }
 
     #[inline]
-    fn visit_map<V>(self, mut visitor: V) -> Result<ExpandableValue, V::Error>
+    fn visit_map<V>(self, mut visitor: V) -> Result<ExpandableValue<'a>, V::Error>
     where
         V: MapAccess<'de>,
     {
