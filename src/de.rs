@@ -4,26 +4,21 @@ use serde::{Deserialize, Deserializer};
 use serde_json::Value;
 use std::borrow::Cow;
 use std::fmt::Formatter;
-use std::marker::PhantomData;
 
-impl<'de: 'a, 'a> Deserialize<'de> for ExpandableValue<'a> {
+impl<'de> Deserialize<'de> for ExpandableValue<'de> {
     #[inline]
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
         D: Deserializer<'de>,
     {
-        deserializer.deserialize_any(ExpandableValueVisitor {
-            phantom: PhantomData::<&'a ExpandableValue>,
-        })
+        deserializer.deserialize_any(ExpandableValueVisitor)
     }
 }
 
-struct ExpandableValueVisitor<'a, T> {
-    phantom: PhantomData<&'a T>,
-}
+struct ExpandableValueVisitor;
 
-impl<'de: 'a, 'a, T> Visitor<'de> for ExpandableValueVisitor<'a, T> {
-    type Value = ExpandableValue<'a>;
+impl<'de> Visitor<'de> for ExpandableValueVisitor {
+    type Value = ExpandableValue<'de>;
 
     fn expecting(&self, formatter: &mut Formatter) -> std::fmt::Result {
         formatter.write_str("any JSON value")
@@ -62,7 +57,7 @@ impl<'de: 'a, 'a, T> Visitor<'de> for ExpandableValueVisitor<'a, T> {
     }
 
     #[inline]
-    fn visit_seq<V>(self, mut visitor: V) -> Result<ExpandableValue<'a>, V::Error>
+    fn visit_seq<V>(self, mut visitor: V) -> Result<Self::Value, V::Error>
     where
         V: SeqAccess<'de>,
     {
@@ -76,14 +71,13 @@ impl<'de: 'a, 'a, T> Visitor<'de> for ExpandableValueVisitor<'a, T> {
     }
 
     #[inline]
-    fn visit_map<V>(self, mut visitor: V) -> Result<ExpandableValue<'a>, V::Error>
+    fn visit_map<V>(self, mut visitor: V) -> Result<Self::Value, V::Error>
     where
         V: MapAccess<'de>,
     {
-        let mut v: Vec<(Cow<str>, ObjectField)> =
-            Vec::with_capacity(visitor.size_hint().unwrap_or(0));
+        let mut v = Vec::with_capacity(visitor.size_hint().unwrap_or(0));
 
-        while let Some((key, value)) = visitor.next_entry::<&str, ExpandableValue>()? {
+        while let Some((key, value)) = visitor.next_entry()? {
             v.push((Cow::Borrowed(key), ObjectField::Field(value)));
         }
 
